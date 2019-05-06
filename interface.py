@@ -4,19 +4,27 @@ from PyQt5.QtWidgets import *
 import sys
 import cv2
 import see
+import inspect
 
 path = './one.jpg'
 
-class MainWindow(QMainWindow):
+
+class MainWindow(QWidget):
     """docstring for MainWindow"""
+    ''' QMainWindow '''
 
     def __init__(self):
         super(MainWindow, self).__init__()
 
-        self.w = QWidget()
-        self.w.resize(250, 150)
-        self.w.move(300, 300)
-        self.w.setWindowTitle('Simple')
+        self.listOfFunctions = sorted([i for i in cv2.__dir__() if inspect.isbuiltin(getattr(cv2, i))])
+
+        # self.w = QWidget()
+        # self.w.resize(250, 150)
+        # self.w.move(300, 300)
+        # self.w.setWindowTitle('Simple')
+        self.resize(250, 150)
+        self.move(300, 300)
+        self.setWindowTitle('Simple')
 
         self.l = QVBoxLayout()
         self.l.addWidget(QLabel('Hello world!'))
@@ -37,16 +45,32 @@ class MainWindow(QMainWindow):
 
         self.l.addLayout(self.lay)
 
-        self.w.setLayout(self.l)
+        self.setLayout(self.l)
 
-        self.w.show()
+        self.show()
 
     def addL(self):
         item = QFormLayout()
-        item.addRow(QLabel('Name'), QLineEdit())
+
+        cbname = QComboBox()
+        cbname.setEditable(True)
+        cbname.addItems(self.listOfFunctions)
+
+        completer = QCompleter(self.listOfFunctions)
+        completer.setCaseSensitivity(False)
+
+        cbname.setCompleter(completer)
+        item.addRow(cbname)
+        # item.addRow(QLabel('Name'), QLineEdit())
         item.addRow(QLabel('args'), QLineEdit())
         item.addRow(QLabel('kwargs'), QLineEdit())
         item.addRow(QLabel('index'), QLineEdit())
+
+        # w = QWidget()
+        # w.setLayout(item)
+        # frame = QFrame(w)
+        # frame.setStyleSheet("background-color: rgb(255,0,0); margin:5px; border:1px solid rgb(0, 255, 0); ")
+        # self.lay.addWidget(w)
 
         self.lay.addLayout(item)
 
@@ -79,8 +103,10 @@ class MainWindow(QMainWindow):
             params = []
             for j in range(self.lay.itemAt(i).count()):
                 # print(j)
-                # print(self.lay.itemAt(i).itemAt(j).widget().text())
+                # print(self.lay.itemAt(i).itemAt(j).widget().currentText())
                 # print(type(self.lay.itemAt(i).itemAt(j).widget()) == QLineEdit)
+                if type(self.lay.itemAt(i).itemAt(j).widget()) == QComboBox:
+                    params.append(self.lay.itemAt(i).itemAt(j).widget().currentText())
                 if type(self.lay.itemAt(i).itemAt(j).widget()) == QLineEdit:
                     # print(self.lay.itemAt(i).itemAt(j).widget().text(), len(params))
                     params.append(self.lay.itemAt(i).itemAt(j).widget().text())
