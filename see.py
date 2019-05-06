@@ -27,13 +27,13 @@ class GenericSee(BaseSee):
         self.indexOfOutput = None
 
     def see(self, image):
-        image = getattr(cv2, self.func)(image, *self.args, **self.kargs)
+        image = getattr(cv2, self.func)(image, *self.args, **self.kwargs)
         return image if self.indexOfOutput is None else image[self.indexOfOutput]
 
-    def setParams(self, func, *args, indexOfOutput=None, **kargs):
+    def setParams(self, func, *args, indexOfOutput=None, **kwargs):
         self.func = func
         self.args = args
-        self.kargs = kargs
+        self.kwargs = kwargs
         if indexOfOutput is not None:
             self.indexOfOutput = indexOfOutput
 
@@ -44,9 +44,9 @@ class SeeColection():
     def __init__(self):
         self.collection = []
 
-    def addGeneric(self, *args, **kargs):
+    def addGeneric(self, *args, **kwargs):
         tmp = GenericSee()
-        tmp.setParams(*args, **kargs)
+        tmp.setParams(*args, **kwargs)
         self.collection.append(tmp)
 
     def run(self, image):

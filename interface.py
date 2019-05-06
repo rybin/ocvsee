@@ -45,7 +45,7 @@ class MainWindow(QMainWindow):
         item = QFormLayout()
         item.addRow(QLabel('Name'), QLineEdit())
         item.addRow(QLabel('args'), QLineEdit())
-        item.addRow(QLabel('kargs'), QLineEdit())
+        item.addRow(QLabel('kwargs'), QLineEdit())
         item.addRow(QLabel('index'), QLineEdit())
 
         self.lay.addLayout(item)
@@ -89,12 +89,12 @@ class MainWindow(QMainWindow):
             args = list()
             if params[1]:
                 args = [eval(x) for x in params[1].split(';')]
-            kargs = dict()
+            kwargs = dict()
             if params[2]:
-                kargs = dict([(x.split('=')[0], eval(x.split('=')[1])) for x in params[2].split(';')])
+                kwargs = dict([(x.split('=')[0], eval(x.split('=')[1])) for x in params[2].split(';')])
             indexOfOutput = int(params[3]) if params[3] else None
-            # print(name, args, kargs, indexOfOutput)
-            c.addGeneric(name, *args, **kargs, indexOfOutput=indexOfOutput)
+            # print(name, args, kwargs, indexOfOutput)
+            c.addGeneric(name, *args, **kwargs, indexOfOutput=indexOfOutput)
         return c
 
 
