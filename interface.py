@@ -64,9 +64,9 @@ class FormBox(QWidget):
         self.form.addRow(QLabel('kwargs'), self.funcKwargs)
         self.form.addRow(QLabel('index'), self.funcIndex)
 
-        a = QPushButton()
-        a.clicked.connect(self.getKwargs)
-        self.form.addRow(a)
+        # a = QPushButton()
+        # a.clicked.connect(self.getKwargs)
+        # self.form.addRow(a)
 
         self.setLayout(self.form)
 
@@ -120,7 +120,7 @@ class FormBox(QWidget):
             b = b[:-1]
         a.append(b)
         for i in range(1, self.funcKwargs.count()):
-            print(self.funcKwargs.itemAt(i).widget())
+            # print(self.funcKwargs.itemAt(i).widget())
             if type(self.funcKwargs.itemAt(i).widget()) == QLineEdit:
                 if self.funcKwargs.itemAt(i).widget().text() == '':
                     continue
@@ -190,8 +190,15 @@ class MainWindow(QWidget):
         self.l.addWidget(button)
 
         self.lay = QVBoxLayout()
+        # self.l.addLayout(self.lay)
 
-        self.l.addLayout(self.lay)
+        # group = QGroupBox()
+        group = QWidget()
+        group.setLayout(self.lay)
+        scrollBox = QScrollArea()
+        scrollBox.setWidget(group)
+        scrollBox.setWidgetResizable(True)
+        self.l.addWidget(scrollBox)
 
         self.setLayout(self.l)
 
